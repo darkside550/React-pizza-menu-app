@@ -108,7 +108,7 @@ function Pizza(props) {
 }
 
 const Order = (props) => {
-  const { closeHour, openHour } = props;
+  const { closeHour } = props;
   return (
     <div className='order'>
       <p>We're Open until {closeHour}:00. Come visit us or order online.</p>
