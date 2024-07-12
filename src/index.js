@@ -67,34 +67,55 @@ function Header() {
 }
 
 function Menu() {
+  const pizzas = pizzaData;
+  const numPizzas = pizzas.length;
   return (
     <main className='menu'>
       <h2>Our Menu</h2>
-      {pizzaData.map((data) => (
-        <Pizza
-          name={data.name}
-          ingredients={data.ingredients}
-          photoName={data.photoName}
-          price={data.price}
-        />
-      ))}
+
+      {numPizzas > 0 ? (
+        <>
+          <p>
+            Authenticate Italian cuisine. 6 creative dishes to choose from. All from our stone oven,
+            all organic and delicious.
+          </p>
+          <ul className='pizzas'>
+            {pizzaData.map((pizza) => (
+              <Pizza pizza={pizza} />
+            ))}
+          </ul>
+        </>
+      ) : (
+        <p>We're still working on our menu, Please come back later :)</p>
+      )}
     </main>
   );
 }
 
 function Pizza(props) {
-  const { photoName, name, ingredients, price } = props;
+  const { photoName, name, ingredients, price, soldOut } = props.pizza;
+
   return (
-    <div className='pizza'>
+    <li className={`pizza ${soldOut && "sold-out"}`}>
       <img src={photoName} alt={name} />
       <div>
         <h3>{name}</h3>
         <p>{ingredients}</p>
-        <span>{price}</span>
+        <span>{soldOut ? "SOLD OUT" : price}</span>
       </div>
-    </div>
+    </li>
   );
 }
+
+const Order = (props) => {
+  const { closeHour, openHour } = props;
+  return (
+    <div className='order'>
+      <p>We're Open until {closeHour}:00. Come visit us or order online.</p>
+      <button className='btn'>Order</button>
+    </div>
+  );
+};
 
 function Footer() {
   const hour = new Date().getHours();
@@ -104,7 +125,13 @@ function Footer() {
 
   return (
     <footer className='footer'>
-      {new Date().toLocaleTimeString()}. We are currently `{isOpen ? "open" : "close"}`
+      {isOpen ? (
+        <Order closeHour={closeHour} />
+      ) : (
+        <p>
+          We're happy to welcome you between {openHour}:00 and {closeHour}:00
+        </p>
+      )}
     </footer>
   );
 }
